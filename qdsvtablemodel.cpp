@@ -19,7 +19,7 @@
 *************************************************************************/
 
 #include <QTextStream>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QFileInfo>
 
 #include "qdsvtablemodel.h"
@@ -64,12 +64,12 @@ Qt::ItemFlags QDsvTableModel::flags(const QModelIndex &index) const
 }
 
 void checkString(QString &temp, QList<QString> &list, QDsvMatrix<QString> &data,
-                 const QChar &delimiter, const QChar &character = 0)
+                 const QChar &delimiter, const QChar &character = (short)0)
 {
     if(temp.count("\"")%2 == 0) {
         if (temp.startsWith(QChar('\"')) && temp.endsWith( QChar('\"') ) ) {
-             temp.remove(QRegExp("^\"") );
-             temp.remove(QRegExp("\"$") );
+             temp.remove(QRegularExpression("^\"") );
+             temp.remove(QRegularExpression("\"$") );
         }
         temp.replace("\"\"", "\"");
         list.append(temp);
@@ -125,7 +125,7 @@ bool QDsvTableModel::loadFromFile(const QString &fileName, const QChar &delim)
     }
 
     file.close();
-    reset();
+    in.reset();
     return true;
 }
 
@@ -157,7 +157,7 @@ bool QDsvTableModel::save(const QString &fileName, const QChar &delim,
     if (!file.open(QIODevice::WriteOnly))
         return false;
     QTextStream out(&file);
-    out.setCodec("UTF-8");
+    out.setEncoding(QStringConverter::Utf8);
     out.setGenerateByteOrderMark(true);
     for (int i = 0; i < dsvMatrix.rowCount(); ++i) {
         for (int j = 0; j < dsvMatrix.columnCount(); ++j) {
@@ -176,7 +176,7 @@ bool QDsvTableModel::save(const QString &fileName, const QChar &delim,
             out << s;
 
             if (j == dsvMatrix.columnCount() - 1)
-                out << endl;
+                out << Qt::endl;
             else
                 out << delimiter;
         }

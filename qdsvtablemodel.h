@@ -113,7 +113,7 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role);
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    bool loadFromFile(const QString &fileName, const QChar &delim = 0);
+    bool loadFromFile(const QString &fileName, const QChar &delim = '\000');
     bool loadFromData(const QByteArray &data, const QString &format);
 
     enum DsvWriteFlag {             //use when writing data to file
@@ -121,7 +121,7 @@ public:
         AlwaysUseDoubleQuotes       //strictly embed data within double quotes
     };
 
-    bool save(const QString &fileName, const QChar &delim = 0,
+    bool save(const QString &fileName, const QChar &delim = (short)0,
               DsvWriteFlag flag = UseDoubleQuotesIfNeeded);
 
 signals:

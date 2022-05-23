@@ -75,7 +75,7 @@ void MainWindow::on_action_Save_triggered()
             return;
         QString extension = QFileInfo(QFile(fileName)).completeSuffix();
         if (extension.toLower() == "csv" || extension.toLower() == "tsv") //known file extensions
-            model->save(fileName, 0);
+            model->save(fileName, '\000');
         else {
             while (true) {
                 bool ok;
